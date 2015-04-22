@@ -59,11 +59,11 @@
 
 			<div ng-controller="pages" >
 				<tabset ng-if="name">
-					<tab>
+					<tab active="avail">
 						<tab-heading>
 	 						<i class="glyphicon glyphicon-pushpin"></i> Baddie Availability
 	 					</tab-heading>
-						<div class="well" ng-controller="availability" ng-show="name">
+						<div class="well" ng-controller="availability" ng-show="name" ng-if="avail">
 							<h1 class="text-center">Welcome {{name}}</h1>
 							<h1 class="text-center">pick your dates for {{bookDate}}</h1>
 							<hr>
@@ -141,11 +141,11 @@
 	 						<i class="glyphicon glyphicon-calendar"></i> Events
 	 					</tab-heading>
 					</tab>-->
-					<tab heading="Todo">
+					<tab active="todo">
 						<tab-heading>
 	 						<i class="glyphicon glyphicon-list-alt"></i> Shopping List
 	 					</tab-heading>
-	 					<div class="panel" ng-controller="shoppingList">
+	 					<div class="panel" ng-controller="shoppingList" ng-if="todo">
 	 						<h1 class="text-center">Shopping List</h1>
 	 						<div class="clearfix"></div>
 	 						<div style="form-group row">
@@ -173,17 +173,19 @@
 		 								<accordion-heading>
 		 								<span class="badge">{{item.quantity}}</span> {{item.name | language : language}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': open, 'glyphicon-chevron-up': !open}"></i>
 		 								</accordion-heading>
-		 								<div class="list-group">
-			 								<a class="list-group-item" ng-if="!item.done" ng-click="item.quantity = item.quantity + 1; save(item)"><i class="glyphicon glyphicon-plus"></i> Add Quantity</a>
-			 								<a class="list-group-item" ng-if="!item.done" ng-click="item.quantity = item.quantity > 1 ? item.quantity - 1 : 1; save(item)"><i class="glyphicon glyphicon-minus"></i> Minus Quantity</a>
-			 								<a class="list-group-item" ng-if="!item.done" ng-click="item.done = true; item.completedBy = name; save(item)"><i class="glyphicon glyphicon-ok"></i> Complete Item</a>
-			 								<a class="list-group-item" ng-click="item.done = false; item.completedBy = ''; save(item)" ng-if="name === item.completedBy"><i class="glyphicon glyphicon-remove" ></i> UnComplete Item</a>
-			 								<a class="list-group-item" ng-if="name === item.creator" ng-click="shoppingList.$remove(item)"><i class="glyphicon glyphicon-trash" ></i> Remove Item</a>
+		 								<div>
+			 								<div class="list-group" >
+				 								<a class="list-group-item" ng-if="!item.done" ng-click="item.quantity = item.quantity + 1; save(item)"><i class="glyphicon glyphicon-plus"></i> Add Quantity</a>
+				 								<a class="list-group-item" ng-if="!item.done" ng-click="item.quantity = item.quantity > 1 ? item.quantity - 1 : 1; save(item)"><i class="glyphicon glyphicon-minus"></i> Minus Quantity</a>
+				 								<a class="list-group-item" ng-if="!item.done" ng-click="item.done = true; item.completedBy = name; save(item)"><i class="glyphicon glyphicon-ok"></i> Complete Item</a>
+				 								<a class="list-group-item" ng-click="item.done = false; item.completedBy = ''; save(item)" ng-if="name === item.completedBy"><i class="glyphicon glyphicon-remove" ></i> UnComplete Item</a>
+				 								<a class="list-group-item" ng-if="name === item.creator" ng-click="shoppingList.$remove(item)"><i class="glyphicon glyphicon-trash" ></i> Remove Item</a>
+				 							</div>
+				 							<ul class="list-group">
+				 								<li class="list-group-item">Requested By: {{item.creator}}</li>
+				 								<li ng-if="item.done" class="list-group-item">Completed By: {{item.completedBy}}</li>
+				 							</ul>
 			 							</div>
-			 							<ul class="list-group">
-			 								<li class="list-group-item">Requested By: {{item.creator}}</li>
-			 								<li ng-if="item.done" class="list-group-item">Completed By: {{item.completedBy}}</li>
-			 							</ul>
 		 							</accordion-group>
 	 							<accordion>
 	 							
