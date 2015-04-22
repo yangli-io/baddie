@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html ng-app="baddie">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<link rel="stylesheet" href="css/bootstrap.min.css"/>
+		<script src="js/angular.min.js"></script>
+		<script src="js/ui-bootstrap-tpls.min.js"></script>
+		<!-- Firebase -->
+		<script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
+		<!-- AngularFire -->
+		<script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+		<script src="js/app.js"></script>
+		<style>
+			th, td{
+				padding: 3px;
+			}
+			.can{
+				background-color: green;
+				color: white;
+			}
+			.cant{
+				background-color: red;
+				color: white;
+			}
+			.complete .panel-heading{
+				color: #3c763d;
+				background-color: #dff0d8;
+				border-color: #d6e9c6;
+			}
+			.incomplete .panel-heading{
+				color: #a94442;
+				border-color: #ebccd1;
+				background-color: #f2dede;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container" >
+			<div ng-controller="signup">
+				<div class="form-group" ng-show="!show">
+					<button class="btn btn-warning" ng-click="changeUsers()">Change Users</button>
+				</div>
+
+				<div class="well" ng-show="show">
+					<h1 class="text-center">
+						Signup for baddie
+					</h1>
+					<div class="row form-group">
+						<label class="col-md-2 text-right">Name:</label>
+						<div class="col-md-8">
+							<input class="form-control" ng-model="name"/>
+						</div>
+					</div>
+					<div class="col-md-offset-2">
+						<button class="btn btn-primary" ng-click="signup()">Sign Up</button>
+					</div>
+				</div>
+			</div>
+
+			<div ng-controller="pages" >
+				<tabset ng-if="name">
+					<tab>
+						<tab-heading>
+	 						<i class="glyphicon glyphicon-pushpin"></i> Baddie Availability
+	 					</tab-heading>
+						<div class="well" ng-controller="availability" ng-show="name">
+							<h1 class="text-center">Welcome {{name}}</h1>
+							<h1 class="text-center">pick your dates for {{bookDate}}</h1>
+							<hr>
+							<div class="form-group row">
+								<div class="col-md-6">
+									<h3 class="text-center">Saturday</h3>
+									<div class="form-group" ng-repeat="(key, value) in dataModel.saturday">
+										<label class="col-md-5 text-right">{{key}}</label>
+										<div class="col-md-7 btn-group form-group">
+											<label class="btn btn-success" ng-click="update('saturday', key, 'yes')" ng-model="value" btn-radio="'yes'" uncheckable>Yes</label>
+					        				<label class="btn btn-success" ng-click="update('saturday', key, 'no')" ng-model="value" btn-radio="'no'" uncheckable>No</label>
+				        				</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<h3 class="text-center">Sunday</h3>
+									<div class="form-group" ng-repeat="(key, value) in dataModel.sunday">
+										<label class="col-md-5 text-right">{{key}}</label>
+										<div class="col-md-7 btn-group form-group">
+											<label class="btn btn-success" ng-click="update('sunday', key, 'yes')" ng-model="value" btn-radio="'yes'" uncheckable>Yes</label>
+					        				<label class="btn btn-success" ng-click="update('sunday', key, 'no')" ng-model="value" btn-radio="'no'" uncheckable>No</label>
+				        				</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div ng-controller="times">
+							<table border="1">
+								<tr>
+									<th>name</th>
+									<th colspan="7">Saturday</th>
+									<th colspan="7">Sunday</th>
+								</tr>
+								<tr>
+									<th></th>
+									<th>3pm</th>
+									<th>4pm</th>
+									<th>5pm</th>
+									<th>6pm</th>
+									<th>7pm</th>
+									<th>8pm</th>
+									<th>9pm</th>
+									<th>3pm</th>
+									<th>4pm</th>
+									<th>5pm</th>
+									<th>6pm</th>
+									<th>7pm</th>
+									<th>8pm</th>
+									<th>9pm</th>
+								</tr>
+								<tr ng-repeat="(key, value) in data">
+									<td>{{key}}</td>
+									<td ng-class="{'can': value.times.saturday.3pm == 'yes', 'cant': value.times.saturday.3pm == 'no'}">{{value.times.saturday.3pm}}</td>
+									<td ng-class="{'can': value.times.saturday.4pm == 'yes', 'cant': value.times.saturday.4pm == 'no'}">{{value.times.saturday.4pm}}</td>
+									<td ng-class="{'can': value.times.saturday.5pm == 'yes', 'cant': value.times.saturday.5pm == 'no'}">{{value.times.saturday.5pm}}</td>
+									<td ng-class="{'can': value.times.saturday.6pm == 'yes', 'cant': value.times.saturday.6pm == 'no'}">{{value.times.saturday.6pm}}</td>
+									<td ng-class="{'can': value.times.saturday.7pm == 'yes', 'cant': value.times.saturday.7pm == 'no'}">{{value.times.saturday.7pm}}</td>
+									<td ng-class="{'can': value.times.saturday.8pm == 'yes', 'cant': value.times.saturday.8pm == 'no'}">{{value.times.saturday.8pm}}</td>
+									<td ng-class="{'can': value.times.saturday.9pm == 'yes', 'cant': value.times.saturday.9pm == 'no'}">{{value.times.saturday.9pm}}</td>
+									<td ng-class="{'can': value.times.sunday.3pm == 'yes', 'cant': value.times.sunday.3pm == 'no'}">{{value.times.sunday.3pm}}</td>
+									<td ng-class="{'can': value.times.sunday.4pm == 'yes', 'cant': value.times.sunday.4pm == 'no'}">{{value.times.sunday.4pm}}</td>
+									<td ng-class="{'can': value.times.sunday.5pm == 'yes', 'cant': value.times.sunday.5pm == 'no'}">{{value.times.sunday.5pm}}</td>
+									<td ng-class="{'can': value.times.sunday.6pm == 'yes', 'cant': value.times.sunday.6pm == 'no'}">{{value.times.sunday.6pm}}</td>
+									<td ng-class="{'can': value.times.sunday.7pm == 'yes', 'cant': value.times.sunday.7pm == 'no'}">{{value.times.sunday.7pm}}</td>
+									<td ng-class="{'can': value.times.sunday.8pm == 'yes', 'cant': value.times.sunday.8pm == 'no'}">{{value.times.sunday.8pm}}</td>
+									<td ng-class="{'can': value.times.sunday.9pm == 'yes', 'cant': value.times.sunday.9pm == 'no'}">{{value.times.sunday.9pm}}</td>
+								</tr>
+
+							</table>
+						</div>
+					</tab>
+					<!--<tab heading="Events">
+	 					<tab-heading>
+	 						<i class="glyphicon glyphicon-calendar"></i> Events
+	 					</tab-heading>
+					</tab>-->
+					<tab heading="Todo">
+						<tab-heading>
+	 						<i class="glyphicon glyphicon-list-alt"></i> Shopping List
+	 					</tab-heading>
+	 					<div class="panel" ng-controller="shoppingList">
+	 						<h1 class="text-center">Shopping List</h1>
+	 						<div class="clearfix"></div>
+	 						<div style="form-group row">
+	 							<div style="margin-bottom: 10px;" class="row">
+		 							<div class="col-sm-4">
+		 								<input class="form-control" ng-model="newItem"/>
+		 							</div>
+		 							<div class="col-sm-8">
+		 								<button type="button" class="btn-primary btn" ng-click="newItem && addNewItem()"> Add Item</button>
+		 								<div class="btn-group" dropdown is-open="status.isopen">
+									      <button type="button" class="btn btn-success dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+									        {{pickLang()}} <span class="caret"></span>
+									      </button>
+									      <ul class="dropdown-menu" role="menu">
+									        <li><a ng-click="language=''">All</a></li>
+									        <li><a ng-click="language='eng'">English</a></li>
+									        <li><a ng-click="language='cn'">中文</a></li>
+									      </ul>
+									    </div>
+		 							</div>
+	 							</div>
+	 							<div class="clearfix"></div>
+	 							<accordion>
+		 							<accordion-group is-open="open" ng-class="{'complete': item.done, 'incomplete': !item.done}" ng-repeat="item in shoppingList | filter : {name: newItem} | orderBy: 'done'">
+		 								<accordion-heading>
+		 								<span class="badge">{{item.quantity}}</span> {{item.name | language : language}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': open, 'glyphicon-chevron-up': !open}"></i>
+		 								</accordion-heading>
+		 								<div class="list-group">
+			 								<a class="list-group-item" ng-if="!item.done" ng-click="item.quantity = item.quantity + 1; save(item)"><i class="glyphicon glyphicon-plus"></i> Add Quantity</a>
+			 								<a class="list-group-item" ng-if="!item.done" ng-click="item.quantity = item.quantity > 1 ? item.quantity - 1 : 1; save(item)"><i class="glyphicon glyphicon-minus"></i> Minus Quantity</a>
+			 								<a class="list-group-item" ng-if="!item.done" ng-click="item.done = true; item.completedBy = name; save(item)"><i class="glyphicon glyphicon-ok"></i> Complete Item</a>
+			 								<a class="list-group-item" ng-click="item.done = false; item.completedBy = ''; save(item)" ng-if="name === item.completedBy"><i class="glyphicon glyphicon-remove" ></i> UnComplete Item</a>
+			 								<a class="list-group-item" ng-if="name === item.creator" ng-click="shoppingList.$remove(item)"><i class="glyphicon glyphicon-trash" ></i> Remove Item</a>
+			 							</div>
+			 							<ul class="list-group">
+			 								<li class="list-group-item">Requested By: {{item.creator}}</li>
+			 								<li ng-if="item.done" class="list-group-item">Completed By: {{item.completedBy}}</li>
+			 							</ul>
+		 							</accordion-group>
+	 							<accordion>
+	 							
+	 						</div>
+	 						<div class="clearfix"></div>
+	 						
+	 					</div>
+					</tab>
+				</tabset>	
+			</div>
+
+		</div>
+		<div></div>
+	</body>
+</html>
